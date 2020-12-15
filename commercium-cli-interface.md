@@ -415,7 +415,7 @@ which returns a JSON array of the form:
 
 
 ```
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # usage: python3 get-masternode-list.py
 #
@@ -440,7 +440,34 @@ while ( i < len(data) ):
 
 So all we are going to do is add a column that is blank if the masternode is fine or an 'X' if it is missing from the masternode list. To do this we are going to add one line to our script to get the masternode list and another few lines to display if the caddr is missing from the list or not:
 
-```
+```#!/usr/bin/env python3
+#
+# usage: python3 get-listunspent.py
+#
+# List all caddrs with unspent CMM and the CMM
+# probably should take a minimum confirmation threshdold (eg data[i]["confirmations"] > 3)
+#
+
+import json
+import subprocess
+
+from collections import defaultdict
+
+command = "./commercium-cli listunspent"
+
+response = subprocess.check_output(command, shell=True, universal_newlines=True)
+data = json.loads( response )
+
+listunspent = defaultdict(float)
+
+i = 0
+while ( i < len(data) ):
+	if ( not data[i]["generated"] ):
+		listunspent[data[i]["address"]] += data[i]["amount"]
+	i += 1
+
+for key, value in listunspent.items():
+    print ( key, value )
 masternodelist=`python3 get-masternode-list.py`;
 
 mninlist=`echo $masternodelist | grep -o $caddress`
@@ -513,9 +540,87 @@ do
 done < ~/.commercium/masternode.conf
 ```
 
+Add non-empty (unspent) Caddrs
+
+The list we have now is of all the masternodes noting which ones are enabled, which are winnders, the caddr and the amount of CMM. One thing that we would like, that is not directly related to masternodes is a list of caddrs with unspent CMM. Now these unspent CMM could be in a masternode caddr if it was moved there, so we need to not duplicate that. Only if the caddr is not a masternode caddr would we like to add it to our list. We do this by using "listunspent". The command is:
+
+`$ ./commercium-cli listunspent`
+
+and heavily abbreviated output is:
+
+```
+[
+  {
+    "txid": "e8e64abe0738aa8bd63314b43e984c824be96519b3f64f8c1e4193229bb0719b",
+    "vout": 1,
+    "generated": false,
+    "address": "CRbAcYUPeKkmZtWjgrXSiCRrAguqC7suWK",
+    "scriptPubKey": "76a91464196f98dbe56bdb2fab4e55baac886a60cd97e888ac",
+    "amount": 73.71212376,
+    "confirmations": 969,
+    "spendable": true
+  },
+  {   
+    "txid": "b903e1fce074c6d7725177d06211fca2dd699feac4493386be37ac962e31c89b",
+    "vout": 1,
+    "generated": true,
+    "address": "CQ88NBxV3ipfVAPKpKe2REY1CoHPug9TeT",
+    "account": "",
+    "scriptPubKey": "76a914540433fca9033626c6c22430c3adbad32887ef4a88ac",
+    "amount": 1.80000000,
+    "confirmations": 257,
+    "spendable": true
+  }
+]
+```
+The entries that have "generated" as true are masternode rewards and these are shown in the list that we have created. What we want are the other address.
+
+So what we would like to do is go through this list and note every "address" where "generated" is false. So real quick, let's see what we get
+
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb       1085.39980000
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb        711.79980000
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb       2293.19970000
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb        953.99970000
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb          1.39960000
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb          3.19620000
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb         73.71202376
+CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb         10.79980000
 
 
 
+### get-listunspent.py
+
+```
+#!/usr/bin/env python3
+#
+# usage: python3 get-listunspent.py
+#
+# List all caddrs with unspent CMM and the CMM
+# probably should take a minimum confirmation threshdold (eg data[i]["confirmations"] > 3)
+#
+
+import json
+import subprocess
+
+from collections import defaultdict
+
+command = "./commercium-cli listunspent"
+
+response = subprocess.check_output(command, shell=True, universal_newlines=True)
+data = json.loads( response )
+
+listunspent = defaultdict(float)
+
+i = 0
+while ( i < len(data) ):
+	if ( not data[i]["generated"] ):
+		listunspent[data[i]["address"]] += data[i]["amount"]
+	i += 1
+
+for key, value in listunspent.items():
+	print('%s %19.8f' %(key, value))
+#    print ( key, value )#!/usr/bin/env python3
+```
 
 
 
@@ -543,7 +648,7 @@ Examples:
 Get detailed information about in-wallet transaction
 Arguments:
 1. "txid" (string, required) The transaction id
-2. "includeWatchonly" (bool, optional, default=false) Whether to include watchonly addresses in balance calculation and details[]
+2. "includeWatchonly" (bool, optional,#!/usr/bin/env python3 default=false) Whether to include watchonly addresses in balance calculation and details[]
 
 ```
 Result:
