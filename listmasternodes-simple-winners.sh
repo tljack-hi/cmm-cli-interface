@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# ./listmasternode-simple-winners.sh
+#
+# List masternodes using alias, # winners, caddr, cmm amount
+#
+
+CMMDIR="."
+
+winnernodelist=`python3 list-winning-mn.py`;
+
+while read in;
+do
+
+#	echo $in
+	
+		#ignore comments or blank lines (not quite right for blank lines)
+	comment=`echo $in | grep "^#"`
+	if [ -z "$comment" -a "$in" != "" ]; then
+	
+		alias=`echo -n $in | awk '{ print $1; }'`
+		
+		collateral_output_txid=`echo -n $in | awk '{ print $4; }'`
+		
+		caddress=`python3 txidtocaddress.py $collateral_output_txid`
+
+		echo -n $alias " "
+		
+			# Show the number of times this caddr won (if any)
+		winnercount=`echo $winnernodelist | grep -o $caddress | wc -l`
+		if [ "$winnercount" == "0" ]; then
+			echo -n "    "
+		else
+			printf "%2d  " $winnercount
+		fi	
+
+		echo -n $caddress
+		
+		amount=`$CMMDIR/commercium-cli z_getbalance "$caddress"`;
+
+		total=`awk -v total="$total" -v amount="$amount" 'BEGIN {printf("%19.8f", total+amount)}'`
+		printf " %19.8f\n" $amount
+	fi
+
+done < ~/.commercium/masternode.conf
+
