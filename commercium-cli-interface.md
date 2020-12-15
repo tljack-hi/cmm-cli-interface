@@ -540,10 +540,10 @@ do
 done < ~/.commercium/masternode.conf
 ```
 
-Add non-empty (unspent) Caddrs
+## Add non-empty (unspent) Caddrs
 
 The list we have now is of all the masternodes noting which ones are enabled, which are winnders, the caddr and the amount of CMM. One thing that we would like, that is not directly related to masternodes is a list of caddrs with unspent CMM. Now these unspent CMM could be in a masternode caddr if it was moved there, so we need to not duplicate that. Only if the caddr is not a masternode caddr would we like to add it to our list. We do this by using "listunspent". The command is:
-
+(not like before)
 `$ ./commercium-cli listunspent`
 
 and heavily abbreviated output is:
@@ -555,7 +555,7 @@ and heavily abbreviated output is:
     "vout": 1,
     "generated": false,
     "address": "CRbAcYUPeKkmZtWjgrXSiCRrAguqC7suWK",
-    "scriptPubKey": "76a91464196f98dbe56bdb2fab4e55baac886a60cd97e888ac",
+    "scriptPubKey": "76a91464196f98dbe56bdb2fab4e55baac886a60cd97e888ac",(not like before)
     "amount": 73.71212376,
     "confirmations": 969,
     "spendable": true
@@ -568,7 +568,7 @@ and heavily abbreviated output is:
     "account": "",
     "scriptPubKey": "76a914540433fca9033626c6c22430c3adbad32887ef4a88ac",
     "amount": 1.80000000,
-    "confirmations": 257,
+    "confirmations": 257,(not like before)
     "spendable": true
   }
 ]
@@ -577,14 +577,12 @@ The entries that have "generated" as true are masternode rewards and these are s
 
 So what we would like to do is go through this list and note every "address" where "generated" is false. So real quick, let's see what we get
 
+```
 CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb       1085.39980000
 CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb        711.79980000
-CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb       2293.19970000
-CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb        953.99970000
-CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb          1.39960000
-CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb          3.19620000
-CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb         73.71202376
-CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb         10.79980000
+```
+
+So basically we are going to get a bunch of different caddrs with cmm values. So we need to add these up in an array and spit them out. In the manly world of AWK this is called an associative array, in the world of python3 it is called a dictionary. So let's do this:
 
 
 
@@ -593,10 +591,12 @@ CPmvbgTS4udzXB3nuyVA7Q8TV3Wfo9VQGb         10.79980000
 ```
 #!/usr/bin/env python3
 #
-# usage: python3 get-listunspent.py
-#
-# List all caddrs with unspent CMM and the CMM
-# probably should take a minimum confirmation threshdold (eg data[i]["confirmations"] > 3)
+# Usage:
+#   python3 get-listunspent.py
+# Description:
+#   Output a list of caddrs with unspent CMM all nicely added up
+# Caveats:
+#   Should take a minimum confirmation threshdold (eg data[i]["confirmations"] > 3) as an argument
 #
 
 import json
@@ -619,11 +619,10 @@ while ( i < len(data) ):
 
 for key, value in listunspent.items():
 	print('%s %19.8f' %(key, value))
-#    print ( key, value )#!/usr/bin/env python3
 ```
 
 
-
+(not like before)
 # ​Commercium-cli Commands
 
 ## getnewaddress
@@ -678,7 +677,7 @@ Result:
       "commitments" : [ string, ... ]     (string) Note commitments for note outputs
       "macs" : [ string, ... ]            (string) Message authentication tags
       "vpub_old" : x.xxx                  (numeric) The amount removed from the transparent value pool
-      "vpub_new" : x.xxx,                 (numeric) The amount added to the transparent value pool
+      "vpub_new" : x.xxx,                 (numeric) The amount added to the transparent va(not like before)lue pool
     }
     ,...
   ],
