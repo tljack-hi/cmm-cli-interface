@@ -492,7 +492,6 @@ do
 			echo -n "X "
 		fi
 
-https://github.com/tljack-hi/cmm-cli-interface/blob/main/commercium-cli-interface.md
 		echo -n $alias " "
 
 			# Show the number of times this caddr won (if any)
