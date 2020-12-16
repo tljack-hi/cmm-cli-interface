@@ -195,8 +195,7 @@ z_listaddresses||Returns the list of Sprout and Sapling shielded addresses belon
 z_listoperationids||Returns the list of operation ids currently known to the wallet.
 z_listreceivedbyaddress||Return a list of amounts received by a zaddr belonging to the node's wallet.
 z_listunspent||Returns array of unspent shielded notes with between minconf and maxconf (inclusive) confirmations.
-z_mergetoaddress||Merge multiple UTXOs and notes into a single UTXO or note.  Coinbase UTXOs are ignored; use `z_shieldcoinbase`
-to combine those into a single note.
+z_mergetoaddress||Merge multiple UTXOs and notes into a single UTXO or note.  Coinbase UTXOs are ignored; use `z_shieldcoinbase` to combine those into a single note.
 z_sendmany||Send multiple times. Amounts are decimal numbers with at most 8 digits of precision.
 z_shieldcoinbase||Shield transparent coinbase funds by sending to a shielded zaddr.  
 zcbenchmark||Runs a benchmark of the selected type samplecount times, returning the running times of each sample.
@@ -208,7 +207,7 @@ zcsamplejoinsplit|Deprecated|Perform a joinsplit and return the JSDescription.
 
 ------------------------------------------------------------------------------------------
 
-##Addressindex
+## Addressindex
 
 ### getaddressbalance
 ```
@@ -849,8 +848,6 @@ Result:
 ["txid"]      (array, strings) The txid(s) which the proof commits to, or empty array if the proof is invalid
 ```
 
-==========================================================================================
-==========================================================================================
 ## Commercium
 
 ------------------------------------------------------------------------------------------
@@ -1567,9 +1564,6 @@ Examples:
 > commercium-cli submitbudget "test-proposal" "https://commercium.net/t/test-proposal" 2 820800 "C9oc6C3dttUbv8zd7zGNq1qKBGf4ZQ1XEE" 500
 > curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "submitbudget", "params": ["test-proposal" "https://commercium.net/t/test-proposal" 2 820800 "C9oc6C3dttUbv8zd7zGNq1qKBGf4ZQ1XEE" 500] }' -H 'content-type: text/plain;' http://127.0.0.1:12019/
 ```		
-
-==========================================================================================
-==========================================================================================
 
 ## Control
 
@@ -2483,7 +2477,7 @@ Examples
 
 ### decoderawtransaction
 ```
-"
+Usage: decoderawtransaction "hexstring"
 
 Return a JSON object representing the serialized, hex-encoded transaction.
 
@@ -2563,7 +2557,7 @@ Examples:
 
 ### decodescript
 ```
-decodescript "hex"
+Usage: decodescript "hex"
 
 Decode a hex-encoded script.
 
@@ -3106,6 +3100,19 @@ As a json rpc call
 
 ### getaccount
 ```
+getaccount "commerciumaddress"
+
+DEPRECATED. Returns the account associated with the given address.
+
+Arguments:
+1. "commerciumaddress"  (string, required) The Commercium address for account lookup.
+
+Result:
+"accountname"        (string) the account address
+
+Examples:
+> commercium-cli getaccount "t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1"
+> curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaccount", "params": ["t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1"] }' -H 'content-type: text/plain;' http://127.0.0.1:12019/
 ```
 
 ### getaccountaddress
@@ -3464,13 +3471,13 @@ As json rpc call
 
 ## listaddressgroupings
 
-```
 **Usage:** listaddressgroupings
 
 Lists groups of addresses which have had their common ownership
 made public by common use as inputs or as the resulting change
 in past transactions
 
+```
 Result:
 [
   [
