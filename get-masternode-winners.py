@@ -10,7 +10,7 @@ import json
 import sys
 
 
-command = "./commercium-cli masternode winners"
+command = "./commercium-cli getmasternodewinners"
 
 response = subprocess.check_output(command, shell=True, universal_newlines=True)
 data = json.loads( response )

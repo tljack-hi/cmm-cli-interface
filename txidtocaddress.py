@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-#
+# 
 # usage: python3 txidtocaddress.py collateral_output_txid
-#
+# 
 # Find the caddress associated with the collateral_output_txid in masternode.conf
 # To see the json structure use ./commercium-cli help gettransaction
-#
+# 
 
 import subprocess
 import json
