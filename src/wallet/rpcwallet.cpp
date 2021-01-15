@@ -122,15 +122,25 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() > 1)
         throw runtime_error(
-            "getnewaddress ( \"account\" )\n"
-            "\nReturns a new Commercium address for receiving payments.\n"
-            "\nArguments:\n"
-            "1. \"account\"        (string, optional) DEPRECATED. If provided, it MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
-            "\nResult:\n"
+            "Usage: getnewaddress\n"
+            "\n"
+            "Description: Returns a new Commercium address for receiving payments.\n"
+            "\n"
+            "Result:\n"
             "\"commerciumaddress\"    (string) The new Commercium address\n"
-            "\nExamples:\n"
+            "\n"
+            "Examples:\n"
             + HelpExampleCli("getnewaddress", "")
+			+
+			"CoUcsya5AeQhd6qkg5pksuUQD6BzV26Nwr\n"
+			"\n"
             + HelpExampleRpc("getnewaddress", "")
+			+
+            "{\n"
+            "  \"result\": \"CMTuhoHUkLp9pSizQVtpBW3RFaV9a85AfS\",\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -199,17 +209,40 @@ UniValue getaccountaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccountaddress \"account\"\n"
-            "\nDEPRECATED. Returns the current Commercium address for receiving payments to this account.\n"
-            "\nArguments:\n"
-            "1. \"account\"       (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
-            "\nResult:\n"
+            "Usage: getaccountaddress \"\"\n"
+            "\n"
+            "Description: DEPRECATED. Returns the current Commercium address for receiving payments to this account.\n"
+            "\n"
+            "Arguments:\n"
+            "1. \"\"       (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error. Not passing the empty string will result in an error.\n"
+            "\n"
+            "Result:\n"
             "\"commerciumaddress\"   (string) The account Commercium address\n"
-            "\nExamples:\n"
+            "\n"
+            "Examples:\n"
             + HelpExampleCli("getaccountaddress", "")
+            +
+            "error code: -1\n"
+            "error message:\n"
+            "[displays this help message]\n"
+            "\n"
             + HelpExampleCli("getaccountaddress", "\"\"")
+            + 
+            "C3MLbcatx81Ug3AuSzR6h16wHuqJeg3pLp\n"
+            "\n"
             + HelpExampleCli("getaccountaddress", "\"myaccount\"")
+            +
+            "error code: -11\n"
+            "error message:\n"
+            "Accounts are unsupported\n"
+            "\n"
             + HelpExampleRpc("getaccountaddress", "\"myaccount\"")
+            +
+            "{\n"
+            "  \"result\": \"CMLb16catx83AuSUgwpLpzR6h31HuqJeg3\",\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -231,14 +264,25 @@ UniValue getrawchangeaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() > 1)
         throw runtime_error(
-            "getrawchangeaddress\n"
-            "\nReturns a new Commercium address, for receiving change.\n"
-            "This is for use with raw transactions, NOT normal use.\n"
-            "\nResult:\n"
+            "Usage: getrawchangeaddress\n"
+            "\n"
+            "Description: Returns a new Commercium address, for receiving change. This is for use with raw transactions, NOT normal use.\n"
+            "\n"
+            "Result:\n"
             "\"address\"    (string) The address\n"
-            "\nExamples:\n"
+            "\n"
+            "Examples:\n"
             + HelpExampleCli("getrawchangeaddress", "")
+            + 
+            "CYcjZRVHq4cCYVUz9PtYb93xyRo2QdN4Aj\n"
+            "\n"
             + HelpExampleRpc("getrawchangeaddress", "")
+            +
+            "{\n"
+            "  \"result\": \"CYcjZRVHq4cCYVUz9PtYb93xyRo2QdN4Aj\",\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
        );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -258,7 +302,7 @@ UniValue getrawchangeaddress(const UniValue& params, bool fHelp)
     return EncodeDestination(keyID);
 }
 
-
+/*
 UniValue setaccount(const UniValue& params, bool fHelp)
 {
     if (!EnsureWalletIsAvailable(fHelp))
@@ -266,14 +310,19 @@ UniValue setaccount(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "setaccount \"commerciumaddress\" \"account\"\n"
-            "\nDEPRECATED. Sets the account associated with the given address.\n"
-            "\nArguments:\n"
+            "Usage: setaccount \"commerciumaddress\" \"\"\n"
+            "\n"
+            "Description: DEPRECATED. Sets the account associated with the given address.\n"
+            "NOTE: Can only set the Commercium address to the default account which is not useful.\n"
+            "\n"
+            "Arguments:\n"
             "1. \"commerciumaddress\"  (string, required) The Commercium address to be associated with an account.\n"
-            "2. \"account\"         (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
-            "\nExamples:\n"
-            + HelpExampleCli("setaccount", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\" \"tabby\"")
-            + HelpExampleRpc("setaccount", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\", \"tabby\"")
+            "2. \"\"                   (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
+            "\n"
+            "Examples:\n"
+            "When using a valid Commercium address:\n"
+            + HelpExampleCli("setaccount", "\"CLpzRMSUgwpuqJeg3b16ca6h31HLtx83Au\" \"\"")
+            + HelpExampleRpc("setaccount", "\"CLpzRMSUgwpuqJeg3b16ca6h31HLtx83Au\", \"\"")
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -312,15 +361,20 @@ UniValue getaccount(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccount \"commerciumaddress\"\n"
-            "\nDEPRECATED. Returns the account associated with the given address.\n"
-            "\nArguments:\n"
+            "Usage: getaccount \"commerciumaddress\"\n"
+            "\n"
+            "Description: DEPRECATED. Returns the account associated with the given address.\n"
+            "NOTE: The default account \"\" is always returned.\n"
+            "\n"
+            "Arguments:\n"
             "1. \"commerciumaddress\"  (string, required) The Commercium address for account lookup.\n"
-            "\nResult:\n"
-            "\"accountname\"        (string) the account address\n"
-            "\nExamples:\n"
-            + HelpExampleCli("getaccount", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\"")
-            + HelpExampleRpc("getaccount", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\"")
+            "\n"
+            "Result:\n"
+            "\"\"        (string) the account address\n"
+            "\n"
+            "Examples:\n"
+            + HelpExampleCli("getaccount", "\"CLpzRMSUgwpuqJeg3b16ca6h31HLtx83Au\"")
+            + HelpExampleRpc("getaccount", "\"CLpzRMSUgwpuqJeg3b16ca6h31HLtx83Au\"")
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -337,7 +391,7 @@ UniValue getaccount(const UniValue& params, bool fHelp)
     }
     return strAccount;
 }
-
+*/
 
 UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
 {
@@ -346,18 +400,21 @@ UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaddressesbyaccount \"account\"\n"
-            "\nDEPRECATED. Returns the list of addresses for the given account.\n"
-            "\nArguments:\n"
+            "Usage: getaddressesbyaccount \"\"\n"
+            "\n"
+            "Description: DEPRECATED. Returns the list of addresses for the default account.\n"
+            "\n"
+            "Arguments:\n"
             "1. \"account\"  (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
-            "\nResult:\n"
+            "\n"
+            "Result:\n"
             "[                     (json array of string)\n"
             "  \"commerciumaddress\"  (string) a Commercium address associated with the given account\n"
             "  ,...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("getaddressesbyaccount", "\"tabby\"")
-            + HelpExampleRpc("getaddressesbyaccount", "\"tabby\"")
+            + HelpExampleCli("getaddressesbyaccount", "\"\"")
+            + HelpExampleRpc("getaddressesbyaccount", "\"\"")
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -414,26 +471,30 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw runtime_error(
-            "sendtoaddress \"commerciumaddress\" amount ( \"comment\" \"comment-to\" subtractfeefromamount )\n"
-            "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n"
+            "Usage: sendtoaddress \"commerciumaddress\" amount ( \"comment\" \"comment-to\" subtractfeefromamount )\n"
+            "\n"
+            "Description: Send an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n"
             + HelpRequiringPassphrase() +
-            "\nArguments:\n"
+            "\n"
+            "Arguments:\n"
             "1. \"commerciumaddress\"  (string, required) The commercium address to send to.\n"
-            "2. \"amount\"      (numeric, required) The amount in " + CURRENCY_UNIT + " to send. eg 0.1\n"
-            "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
+            "2. \"amount\"             (numeric, required) The amount in " + CURRENCY_UNIT + " to send. eg 0.1\n"
+            "3. \"comment\"            (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
-            "4. \"comment-to\"  (string, optional) A comment to store the name of the person or organization \n"
+            "4. \"comment-to\"         (string, optional) A comment to store the name of the person or organization \n"
             "                             to which you're sending the transaction. This is not part of the \n"
             "                             transaction, just kept in your wallet.\n"
             "5. subtractfeefromamount  (boolean, optional, default=false) The fee will be deducted from the amount being sent.\n"
             "                             The recipient will receive less Commercium than you enter in the amount field.\n"
-            "\nResult:\n"
+            "\n"
+            "Result:\n"
             "\"transactionid\"  (string) The transaction id.\n"
-            "\nExamples:\n"
-            + HelpExampleCli("sendtoaddress", "\"t1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" 0.1")
-            + HelpExampleCli("sendtoaddress", "\"t1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" 0.1 \"donation\" \"seans outpost\"")
-            + HelpExampleCli("sendtoaddress", "\"t1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" 0.1 \"\" \"\" true")
-            + HelpExampleRpc("sendtoaddress", "\"t1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\", 0.1, \"donation\", \"seans outpost\"")
+            "\n"
+            "Examples:\n"
+            + HelpExampleCli("sendtoaddress", "\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\" 0.1")
+            + HelpExampleCli("sendtoaddress", "\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\" 0.1 \"donation\" \"seans outpost\"")
+            + HelpExampleCli("sendtoaddress", "\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\" 0.1 \"\" \"\" true")
+            + HelpExampleRpc("sendtoaddress", "\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\", 0.1, \"donation\", \"seans outpost\"")
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -473,25 +534,66 @@ UniValue listaddressgroupings(const UniValue& params, bool fHelp)
 
     if (fHelp)
         throw runtime_error(
-            "listaddressgroupings\n"
-            "\nLists groups of addresses which have had their common ownership\n"
-            "made public by common use as inputs or as the resulting change\n"
-            "in past transactions\n"
-            "\nResult:\n"
+            "Usage: listaddressgroupings\n"
+            "\n"
+            "Description: Lists groups of addresses which have had their common ownership made public by common use as inputs or as the resulting change in past transactions\n"
+            "\n"
+            "Result:\n"
             "[\n"
             "  [\n"
             "    [\n"
-            "      \"commerciumaddress\",     (string) The commercium address\n"
+            "      \"commerciumaddress\",    (string) The commercium address\n"
             "      amount,                 (numeric) The amount in " + CURRENCY_UNIT + "\n"
-            "      \"account\"             (string, optional) The account (DEPRECATED)\n"
+            "      \"account\"               (string, optional) The account (DEPRECATED)\n"
             "    ]\n"
             "    ,...\n"
             "  ]\n"
             "  ,...\n"
             "]\n"
-            "\nExamples:\n"
+            "\n"
+            "Examples:\n"
             + HelpExampleCli("listaddressgroupings", "")
+            +
+            "[\n"
+            "  [\n"
+            "    [\n"
+            "      \"CpfKLDz3UWvDXHAFE7ofmM1PdPyNRwbGa\",\n"
+            "      24.50438736,\n"
+            "      \"\"\n"
+            "    ]\n"
+            "  ],\n"
+            "  [\n"
+            "    [\n"
+            "      \"CxuyfUhw8Ju9yCKeSCsj3VncGh1GXBge\",\n"
+            "      0.00000000,\n"
+            "      \"\"\n"
+            "    ]\n"
+            "  ],\n"
+            "  ...\n"
+            "]\n"
             + HelpExampleRpc("listaddressgroupings", "")
+            +
+            "{\n"
+            "  \"result\": [\n"
+            "    [\n"
+            "      [\n"
+            "        \"CpfKLDz3UWvDXHAFE7ofmM1PdPyNRwbGa\",\n"
+            "        24.50438736,\n"
+            "        \"\"\n"
+            "      ]\n"
+            "    ],\n"
+            "    [\n"
+            "      [\n"
+            "        \"CxuyfUhw8Ju9yCKeSCsj3VncGh1GXBge\",\n"
+            "        0,\n"
+            "        \"\"\n"
+            "      ]\n"
+            "    ],\n"
+            "    ...\n"
+            "  ],\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -583,22 +685,41 @@ UniValue getreceivedbyaddress(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaddress \"commerciumaddress\" ( minconf )\n"
-            "\nReturns the total amount received by the given Commercium address in transactions with at least minconf confirmations.\n"
-            "\nArguments:\n"
-            "1. \"commerciumaddress\"  (string, required) The Commercium address for transactions.\n"
-            "2. minconf             (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
-            "\nResult:\n"
+            "Usage: getreceivedbyaddress \"commerciumaddress\" ( minconf )\n"
+            "\n"
+            "Description: Returns the total amount received by the given Commercium address in transactions with at least minconf confirmations.\n"
+            "\n"
+            "Arguments:\n"
+            "1. \"commerciumaddress\"   (string, required) The Commercium address for transactions.\n"
+            "2. minconf               (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
+            "\n"
+            "Result:\n"
             "amount   (numeric) The total amount in " + CURRENCY_UNIT + " received at this address.\n"
-            "\nExamples:\n"
+            "\n"
+            "Examples:\n"
             "\nThe amount from transactions with at least 1 confirmation\n"
-            + HelpExampleCli("getreceivedbyaddress", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\"") +
+            + HelpExampleCli("getreceivedbyaddress", "\"CiZw9wUhZYnipXZL3QnZfX98boFozvACM4\"")
+            +
+            "1996.84062814\n"
+            "\n"
             "\nThe amount including unconfirmed transactions, zero confirmations\n"
-            + HelpExampleCli("getreceivedbyaddress", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\" 0") +
+            + HelpExampleCli("getreceivedbyaddress", "\"CiZw9wUhZYnipXZL3QnZfX98boFozvACM4\" 0")
+            +
+            "2836.14862840\n"
+            "\n"
             "\nThe amount with at least 6 confirmations, very safe\n"
-            + HelpExampleCli("getreceivedbyaddress", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\" 6") +
+            + HelpExampleCli("getreceivedbyaddress", "\"CiZw9wUhZYnipXZL3QnZfX98boFozvACM4\" 6")
+            +
+            "848.08461428\n"
+            "\n"
             "\nAs a json rpc call\n"
-            + HelpExampleRpc("getreceivedbyaddress", "\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\", 6")
+            + HelpExampleRpc("getreceivedbyaddress", "\"CiZw9wUhZYnipXZL3QnZfX98boFozvACM4\", 6")
+            +
+            "{\n"
+            "  \"result\": 0,\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
        );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -643,22 +764,39 @@ UniValue getreceivedbyaccount(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaccount \"account\" ( minconf )\n"
-            "\nDEPRECATED. Returns the total amount received by addresses with <account> in transactions with at least [minconf] confirmations.\n"
-            "\nArguments:\n"
-            "1. \"account\"      (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
+            "Usage: getreceivedbyaccount \"\" ( minconf )\n"
+            "\n"
+            "Description: DEPRECATED. Returns the total amount received by addresses with <account> in transactions with at least [minconf] confirmations.\n"
+            "\n"
+            "Arguments:\n"
+            "1. \"account\"        (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
             "2. minconf          (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
-            "\nResult:\n"
+            "\n"
+            "Result:\n"
             "amount              (numeric) The total amount in " + CURRENCY_UNIT + " received for this account.\n"
-            "\nExamples:\n"
-            "\nAmount received by the default account with at least 1 confirmation\n"
-            + HelpExampleCli("getreceivedbyaccount", "\"\"") +
+            "\n"
+            "Examples:\n"
+            "\n"
+            "Amount received by the default account with at least 1 confirmation\n"
+            + HelpExampleCli("getreceivedbyaccount", "\"\"")
+            +
             "\nAmount received at the tabby account including unconfirmed amounts with zero confirmations\n"
-            + HelpExampleCli("getreceivedbyaccount", "\"tabby\" 0") +
+            + HelpExampleCli("getreceivedbyaccount", "\"tabby\" 0")
+            +
+            "error code: -11\n"
+            "error message:\n"
+            "Accounts are unsupported\n"
             "\nThe amount with at least 6 confirmation, very safe\n"
-            + HelpExampleCli("getreceivedbyaccount", "\"tabby\" 6") +
+            + HelpExampleCli("getreceivedbyaccount", "\"\" 6")
+            +
             "\nAs a json rpc call\n"
-            + HelpExampleRpc("getreceivedbyaccount", "\"tabby\", 6")
+            + HelpExampleRpc("getreceivedbyaccount", "\"\", 6")
+            +
+            "{\n"
+            "  \"result\": 7370819.48190195,\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -732,21 +870,38 @@ UniValue getbalance(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() > 3)
         throw runtime_error(
-            "getbalance ( \"account\" minconf includeWatchonly )\n"
-            "\nReturns the server's total available balance.\n"
-            "\nArguments:\n"
-            "1. \"account\"      (string, optional) DEPRECATED. If provided, it MUST be set to the empty string \"\" or to the string \"*\", either of which will give the total available balance. Passing any other string will result in an error.\n"
+            "Usage: getbalance ( \"\" minconf includeWatchonly )\n"
+            "\n"
+            "Description: Returns the server's total available balance.\n"
+            "\n"
+            "Arguments:\n"
+            "1. \"\"               (string, optional) DEPRECATED. If provided, it MUST be set to the empty string \"\" or to the string \"*\", either of which will give the total available balance. Passing any other string will result in an error.\n"
             "2. minconf          (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
             "3. includeWatchonly (bool, optional, default=false) Also include balance in watchonly addresses (see 'importaddress')\n"
-            "\nResult:\n"
+            "\n"
+            "Result:\n"
             "amount              (numeric) The total amount in " + CURRENCY_UNIT + " received for this account.\n"
-            "\nExamples:\n"
-            "\nThe total amount in the wallet\n"
-            + HelpExampleCli("getbalance", "") +
-            "\nThe total amount in the wallet at least 5 blocks confirmed\n"
-            + HelpExampleCli("getbalance", "\"*\" 6") +
-            "\nAs a json rpc call\n"
-            + HelpExampleRpc("getbalance", "\"*\", 6")
+            "\n"
+            "Examples:\n"
+            "\n"
+            "The total amount in the wallet\n"
+            + HelpExampleCli("getbalance", "")
+            +
+            "11460.50512376\n"
+            "\n"
+            "The total amount in the wallet at least 5 blocks confirmed\n"
+            + HelpExampleCli("getbalance", "\"\" 5")
+            +
+            "11460.50512376\n"
+            "\n"
+            "As a json rpc call\n"
+            + HelpExampleRpc("getbalance", "\"*\", 5")
+            +
+            "{\n"
+            "  \"result\": 2748178.4111954,\n"
+            "  \"error\": null,\n"
+            "  \"id\": \"curltest\"\n"
+            "}\n"
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -959,18 +1114,20 @@ UniValue sendmany(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw runtime_error(
-            "sendmany \"fromaccount\" {\"address\":amount,...} ( minconf \"comment\" [\"address\",...] )\n"
-            "\nSend multiple times. Amounts are decimal numbers with at most 8 digits of precision."
+            "Usage: sendmany \"fromaccount\" {\"address\":amount,...} ( minconf \"comment\" [\"address\",...] )\n"
+            "\n"
+            "Description: Send multiple times. Amounts are decimal numbers with at most 8 digits of precision."
             + HelpRequiringPassphrase() + "\n"
-            "\nArguments:\n"
-            "1. \"fromaccount\"         (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
-            "2. \"amounts\"             (string, required) A json object with addresses and amounts\n"
+            "\n"
+            "Arguments:\n"
+            "1. \"fromaccount\"           (string, required) MUST be set to the empty string \"\" to represent the default account. Passing any other string will result in an error.\n"
+            "2. \"amounts\"               (string, required) A json object with addresses and amounts\n"
             "    {\n"
-            "      \"address\":amount   (numeric) The commercium address is the key, the numeric amount in " + CURRENCY_UNIT + " is the value\n"
+            "      \"address\":amount     (numeric) The Commercium address is the key, the numeric amount in " + CURRENCY_UNIT + " is the value\n"
             "      ,...\n"
             "    }\n"
             "3. minconf                 (numeric, optional, default=1) Only use the balance confirmed at least this many times.\n"
-            "4. \"comment\"             (string, optional) A comment\n"
+            "4. \"comment\"               (string, optional) A comment\n"
             "5. subtractfeefromamount   (string, optional) A json array with addresses.\n"
             "                           The fee will be equally deducted from the amount of each selected address.\n"
             "                           Those recipients will receive less Commercium than you enter in their corresponding amount field.\n"
@@ -979,18 +1136,82 @@ UniValue sendmany(const UniValue& params, bool fHelp)
             "      \"address\"            (string) Subtract fee from this address\n"
             "      ,...\n"
             "    ]\n"
-            "\nResult:\n"
-            "\"transactionid\"          (string) The transaction id for the send. Only 1 transaction is created regardless of \n"
-            "                                    the number of addresses.\n"
-            "\nExamples:\n"
-            "\nSend two amounts to two different addresses:\n"
-            + HelpExampleCli("sendmany", "\"\" \"{\\\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\\\":0.01,\\\"t1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\\\":0.02}\"") +
-            "\nSend two amounts to two different addresses setting the confirmation and comment:\n"
-            + HelpExampleCli("sendmany", "\"\" \"{\\\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\\\":0.01,\\\"t1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\\\":0.02}\" 6 \"testing\"") +
-            "\nSend two amounts to two different addresses, subtract fee from amount:\n"
-            + HelpExampleCli("sendmany", "\"\" \"{\\\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\\\":0.01,\\\"t1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\\\":0.02}\" 1 \"\" \"[\\\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\\\",\\\"t1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\\\"]\"") +
-            "\nAs a json rpc call\n"
-            + HelpExampleRpc("sendmany", "\"\", \"{\\\"t14oHp2v54vfmdgQ3v3SNuQga8JKHTNi2a1\\\":0.01,\\\"t1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\\\":0.02}\", 6, \"testing\"")
+            "\n"
+            "Result:\n"
+            "\"transactionid\"            (string) The transaction id for the send. Only 1 transaction is created regardless of the number of addresses.\n"
+            "\n"
+            "Examples:\n"
+            "\n"
+            "Send two amounts to two different addresses:\n"
+            + HelpExampleCli("sendmany", "\"\" \"{\\\"Cc2F8jNv5AKkJaGBfUv4f6hYZaJ96YXvGD\\\":0.01,\\\"CP4vgFvpdfXL27t3jn7AJRHRTUkT6pGAhj\\\":0.02}\"")
+            +
+            "8a6f53645f6a8177b5ee492e8ddfcc36b00c1c03d1dcb46162d74815cb0e18e4"
+            "\n"
+            "Let's see what happened:\n"
+            + HelpExampleCli("gettransaction", "\"8a6f53645f6a8177b5ee492e8ddfcc36b00c1c03d1dcb46162d74815cb0e18e4\"")
+            +
+            "{\n"
+            "  \"amount\": 0,\n"
+            "  \"fee\": -2.78e-06,\n"
+            "  \"confirmations\": 30720,\n"
+            "  \"blockhash\": \"000000fd5cb2cb4fb7cd0c072925f977f11d680bc17347b1a0d22c9e3312a158\",\n"
+            "  \"blockindex\": 1,\n"
+            "  \"blocktime\": 1608333130,\n"
+            "  \"expiryheight\": 1002302,\n"
+            "  \"txid\": \"8a6f53645f6a8177b5ee492e8ddfcc36b00c1c03d1dcb46162d74815cb0e18e4\",\n"
+            "  \"walletconflicts\": [],\n"
+            "  \"time\": 1608333112,\n"
+            "  \"timereceived\": 1608333112,\n"
+            "  \"vjoinsplit\": [],\n"
+            "  \"details\": [\n"
+            "    {\n"
+            "      \"account\": \"\",\n"
+            "      \"address\": \"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\",\n"
+            "      \"category\": \"send\",\n"
+            "      \"amount\": -0.01,\n"
+            "      \"vout\": 0,\n"
+            "      \"fee\": -2.78e-06,\n"
+            "      \"size\": 278\n"
+            "    },\n"
+            "    {\n"
+            "      \"account\": \"\",\n"
+            "      \"address\": \"CRHTUkT6pGAhjP4vg2RFvpdfXL7t3jn7AJ\",\n"
+            "      \"category\": \"send\",\n"
+            "      \"amount\": -0.02,\n"
+            "      \"vout\": 2,\n"
+            "      \"fee\": -2.78e-06,\n"
+            "      \"size\": 278\n"
+            "    },\n"
+            "    {\n"
+            "      \"account\": \"\",\n"
+            "      \"address\": \"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\",\n"
+            "      \"category\": \"receive\",\n"
+            "      \"amount\": 0.01,\n"
+            "      \"vout\": 0,\n"
+            "      \"size\": 278\n"
+            "    },\n"
+            "    {\n"
+            "      \"account\": \"\",\n"
+            "      \"address\": \"CRHTUkT6pGAhjP4vg2RFvpdfXL7t3jn7AJ\",\n"
+            "      \"category\": \"receive\",\n"
+            "      \"amount\": 0.02,\n"
+            "      \"vout\": 2,\n"
+            "      \"size\": 278\n"
+            "    }\n"
+            "  ],\n"
+            "  \"hex\": \"0400008085202f89014b39556849591180f5deb6bfb5f4b62fcb13b1efc7ceb222ea9e673d7998a16c010000006a47304402201338feb47b7713674e45400e93e902622748e3d648975abd77528b892b948646022072ada0a35cd19175044973c2a18f2737199b46b8a32ce26e9f8a6e6717d70e5b0121022e645724b8043c2f136f606f62b94e2f400672534a64b9bf8369d9c5f4cea944feffffff0340420f00000000001976a914adf7c8c551667a18d514c85f811b6c836fb89d6c88ac95642402000000001976a9146a5dc2bd613f213594ddfe29be5250a484157e6888ac80841e00000000001976a91460c006ff43a25e995bd099f51875f93e4d7bfd2888ac1f4b0f003e4b0f000000000000000000000000\"\n"
+            "}\n"
+            "\n"            
+            "Send two amounts to two different addresses setting the confirmation and comment:\n"
+            + HelpExampleCli("sendmany", "\"\" \"{\\\"Cc2F8jNv5AKkJaGBfUv4f6hYZaJ96YXvGD\\\":0.01,\\\"CP4vgFvpdfXL27t3jn7AJRHRTUkT6pGAhj\\\":0.02}\" 6 \"testing\"")
+            +
+            "\n"
+            "Send two amounts to two different addresses, subtract fee from amount:\n"
+            + HelpExampleCli("sendmany", "\"\" \"{\\\"Cc2F8jNv5AKkJaGBfUv4f6hYZaJ96YXvGD\\\":0.01,\\\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\\\":0.02}\" 1 \"\" \"[\\\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\\\",\\\"CRHTUkT6pGAhjP4vg2RFvpdfXL7t3jn7AJ\\\"]\"")
+            +
+            "\n"
+            "As a json rpc call\n"
+            + HelpExampleRpc("sendmany", "\"\", \"{\\\"CYKkJac2F8jNvJ96GBfUvXvGD5A4f6hYZa\\\":0.01,\\\"CRHTUkT6pGAhjP4vg2RFvpdfXL7t3jn7AJ\\\":0.02}\", 6, \"testing\"")
         );
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -4607,7 +4828,7 @@ static const CRPCCommand commands[] =
     { "wallet",             "dumpwallet",               &dumpwallet,               true  },
     { "wallet",             "encryptwallet",            &encryptwallet,            true  },
     { "wallet",             "getaccountaddress",        &getaccountaddress,        true  },
-    { "wallet",             "getaccount",               &getaccount,               true  },
+//    { "wallet",             "getaccount",               &getaccount,               true  },
     { "wallet",             "getaddressesbyaccount",    &getaddressesbyaccount,    true  },
     { "wallet",             "getbalance",               &getbalance,               false },
     { "wallet",             "getnewaddress",            &getnewaddress,            true  },
@@ -4634,7 +4855,7 @@ static const CRPCCommand commands[] =
     { "wallet",             "sendfrom",                 &sendfrom,                 false },
     { "wallet",             "sendmany",                 &sendmany,                 false },
     { "wallet",             "sendtoaddress",            &sendtoaddress,            false },
-    { "wallet",             "setaccount",               &setaccount,               true  },
+//    { "wallet",             "setaccount",               &setaccount,               true  },
     { "wallet",             "settxfee",                 &settxfee,                 true  },
     { "wallet",             "signmessage",              &signmessage,              true  },
     { "wallet",             "walletlock",               &walletlock,               true  },
