@@ -1934,8 +1934,8 @@ UniValue backupwallet(const UniValue& params, bool fHelp)
 
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "backupwallet \"destination\"\n"
-            "\nSafely copies wallet.dat to destination filename\n"
+            "Usage: backupwallet \"destination\"\n"
+            "\nDescription: Safely copies wallet.dat to destination filename\n"
             "\nArguments:\n"
             "1. \"destination\"   (string, required) The destination filename, saved in the directory set by -exportdir option.\n"
             "\nResult:\n"
